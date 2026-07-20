@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Police Leave Portal - Admin Login</title>
+    <style>
+        :root {
+            --upp-navy: #1B2A47;
+            --upp-red: #8B0000;
+            --upp-gold: #D4AF37;
+            --bg-color: #F0F4F8;
+            --card-bg: #FFFFFF;
+            --text-main: #2D3748;
+            --text-muted: #718096;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: linear-gradient(135deg, rgba(27, 42, 71, 0.05) 0%, rgba(139, 0, 0, 0.05) 100%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border-top: 5px solid var(--upp-navy);
+            position: relative;
+        }
+
+        /* Dual color ribbon accent */
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 50%;
+            height: 5px;
+            background: var(--upp-red);
+        }
+
+        .login-header {
+            text-align: center;
+            padding: 30px 20px 20px 20px;
+            background: linear-gradient(to bottom, #FFFFFF, #F7FAFC);
+            border-bottom: 1px solid #EDF2F7;
+        }
+
+        .police-logo {
+            width: 90px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.15));
+        }
+
+        .login-header h1 {
+            font-size: 1.3rem;
+            color: var(--upp-navy);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .login-header h2 {
+            font-size: 0.95rem;
+            color: var(--upp-red);
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .login-header small {
+            display: block;
+            margin-top: 5px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--upp-navy);
+            text-transform: uppercase;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #CBD5E0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--upp-navy);
+            box-shadow: 0 0 0 3px rgba(27, 42, 71, 0.1);
+        }
+
+        /* Captcha Block */
+        .captcha-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .captcha-box {
+            background: #E2E8F0;
+            padding: 10px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            color: var(--upp-navy);
+            user-select: none;
+            border-radius: 6px;
+            border: 1px dashed var(--text-muted);
+            text-decoration: line-through;
+            font-style: italic;
+        }
+
+        .btn-login {
+            background-color: var(--upp-navy);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.2s;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(27, 42, 71, 0.15);
+        }
+
+        .btn-login:hover {
+            background-color: var(--upp-red);
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 15px;
+            background: #F7FAFC;
+            border-top: 1px solid #EDF2F7;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .login-footer a {
+            color: var(--upp-red);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            background-color: #FED7D7;
+            color: #C53030;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 600;
+            border-left: 4px solid #E53E3E;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Header Section -->
+        <div class="login-header">
+            <img class="police-logo" src="https://uppolice.gov.in/site/writereaddata/siteImages/logo.png" alt="UP Police Logo">
+            <h1>उत्तर Pradesh पुलिस</h1>
+            <h2>Command & Admin Dashboard</h2>
+            <small>Leave Management System (अवकाश प्रबंधन प्रणाली)</small>
+        </div>
+
+        <!-- Form Body -->
+        <div class="login-body">
+            <div class="alert" id="loginAlert">Invalid Credentials or Captcha. Please try again.</div>
+
+            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+                
+                <!-- District / Wing Selection -->
+                <div class="form-group">
+                    <label for="adminUnit">District / Posting Unit (जनपद / इकाई)</label>
+                    <select id="adminUnit" class="form-control" required>
+                        <option value="">-- Select Unit --</option>
+                        <option value="Lucknow">Lucknow Commissionerate</option>
+                        <option value="Kanpur">Kanpur Commissionerate</option>
+                        <option value="Varanasi">Varanasi Commissionerate</option>
+                        <option value="Prayagraj">Prayagraj Commissionerate</option>
+                        <option value="Bareilly">Bareilly District</option>
+                        <option value="Gorakhpur">Gorakhpur District</option>
+                        <option value="PHQ">Police Headquarters (Signature Building)</option>
+                    </select>
+                </div>
+
+                <!-- Username / PNO -->
+                <div class="form-group">
+                    <label for="adminPno">Admin User ID / PNO No.</label>
+                    <input type="text" id="adminPno" class="form-control" placeholder="Enter PNO or Login ID" required autocomplete="username">
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="adminPassword">Password (पासवर्ड)</label>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <!-- Security Captcha -->
+                <div class="form-group">
+                    <label for="captchaInput">Security Code (कैप्चा कोड)</label>
+                    <div class="captcha-wrapper">
+                        <div class="captcha-box" id="captchaCode">X7r9B</div>
+                        <input type="text" id="captchaInput" class="form-control" placeholder="Enter Code" required autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-login">Secure Login →</button>
+            </form>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="login-footer">
+            <p>Authorized Personnel Only. Actions are logged.</p>
+            <p style="margin-top: 5px;"><a href="#">Forgot Password?</a> | <a href="#">Technical Support</a></p>
+        </div>
+    </div>
+
+    <!-- Interface Logic -->
+    <script>
+        // Generate a random simple captcha code on load
+        function generateCaptcha() {
+            const chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+            let result = "";
+            for (let i = 0; i < 5; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captchaCode').innerText = result;
+        }
+
+        // Initialize Captcha
+        window.onload = generateCaptcha;
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            
+            const pno = document.getElementById('adminPno').value;
+            const password = document.getElementById('adminPassword').value;
+            const unit = document.getElementById('adminUnit').value;
+            const captchaInput = document.getElementById('captchaInput').value;
+            const generatedCaptcha = document.getElementById('captchaCode').innerText;
+            const alertBox = document.getElementById('loginAlert');
+
+            // Simple client-side Captcha evaluation
+            if (captchaInput.trim().toLowerCase() !== generatedCaptcha.toLowerCase()) {
+                alertBox.innerText = "Error: Captcha verification failed.";
+                alertBox.style.display = "block";
+                generateCaptcha(); // refresh captcha
+                document.getElementById('captchaInput').value = "";
+                return;
+            }
+
+            // Mock Validation check
+            if (pno === "admin123" && password === "password") {
+                alertBox.style.display = "none";
+                alert(`Login Successful!\nWelcome to the Command Panel for ${unit}.`);
+                // location.href = "admin-dashboard.html"; // Route to dashboard here
+            } else {
+                alertBox.innerText = "Error: Invalid PNO Number or Security Password.";
+                alertBox.style.display = "block";
+                generateCaptcha();
+            }
+        }
+    </script>
+</body>
+</html>
