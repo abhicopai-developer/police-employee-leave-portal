@@ -268,50 +268,37 @@
     </div>
 
     <!-- Interface Logic -->
-    <script>
-        // Generate a random simple captcha code on load
-        function generateCaptcha() {
-            const chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-            let result = "";
-            for (let i = 0; i < 5; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('captchaCode').innerText = result;
-        }
+    function handleAdminLogin(event) {
+    event.preventDefault();
+    
+    const pno = document.getElementById('adminPno').value;
+    const password = document.getElementById('adminPassword').value;
+    const unit = document.getElementById('adminUnit').value;
+    const captchaInput = document.getElementById('captchaInput').value;
+    const generatedCaptcha = document.getElementById('captchaCode').innerText;
+    const alertBox = document.getElementById('loginAlert');
 
-        // Initialize Captcha
-        window.onload = generateCaptcha;
+    // 1. Captcha Validation
+    if (captchaInput.trim().toLowerCase() !== generatedCaptcha.toLowerCase()) {
+        alertBox.innerText = "Error: Captcha verification failed.";
+        alertBox.style.display = "block";
+        generateCaptcha(); // refresh captcha
+        document.getElementById('captchaInput').value = "";
+        return;
+    }
 
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            
-            const pno = document.getElementById('adminPno').value;
-            const password = document.getElementById('adminPassword').value;
-            const unit = document.getElementById('adminUnit').value;
-            const captchaInput = document.getElementById('captchaInput').value;
-            const generatedCaptcha = document.getElementById('captchaCode').innerText;
-            const alertBox = document.getElementById('loginAlert');
-
-            // Simple client-side Captcha evaluation
-            if (captchaInput.trim().toLowerCase() !== generatedCaptcha.toLowerCase()) {
-                alertBox.innerText = "Error: Captcha verification failed.";
-                alertBox.style.display = "block";
-                generateCaptcha(); // refresh captcha
-                document.getElementById('captchaInput').value = "";
-                return;
-            }
-
-            // Mock Validation check
-            if (pno === "admin123" && password === "password") {
-                alertBox.style.display = "none";
-                alert(`Login Successful!\nWelcome to the Command Panel for ${unit}.`);
-                // location.href = "admin-dashboard.html"; // Route to dashboard here
-            } else {
-                alertBox.innerText = "Error: Invalid PNO Number or Security Password.";
-                alertBox.style.display = "block";
-                generateCaptcha();
-            }
-        }
-    </script>
+    // 2. Updated Credential Check (Accepts admin/admin or admin123/password)
+    if ((pno === "admin" && password === "admin") || (pno === "admin123" && password === "password")) {
+        alertBox.style.display = "none";
+        alert(`Login Successful!\nWelcome to the Command Panel for ${unit}.`);
+        
+        // Redirects to your employee dashboard
+        window.location.href = "employee-dashboard.html"; 
+    } else {
+        alertBox.innerText = "Error: Invalid PNO Number or Security Password.";
+        alertBox.style.display = "block";
+        generateCaptcha(); // refresh captcha on failure
+    }
+}
 </body>
 </html>
