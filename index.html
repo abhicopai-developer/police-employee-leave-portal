@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Department - Leave Portal</title>
+    <style>
+        :root {
+            --primary-color: #0B2240; /* Police Navy Blue */
+            --secondary-color: #1E3A8A;
+            --accent-color: #D97706; /* Badge Gold */
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --success: #10B981;
+            --pending: #F59E0B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+        }
+
+        .badge-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+
+        .badge-header h2 {
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li a {
+            display: block;
+            color: #E5E7EB;
+            padding: 12px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            transition: background 0.2s;
+        }
+
+        .nav-links li a.active, .nav-links li a:hover {
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #E5E7EB;
+            padding-bottom: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-info .rank {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        /* Leave Balance Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .card.earned { border-top-color: var(--secondary-color); }
+        .card.casual { border-top-color: var(--accent-color); }
+        .card.medical { border-top-color: var(--success); }
+
+        .card h3 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .card .balance {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Form & History Section Grid */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-container, .table-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 10px;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #D1D5DB;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Table Styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .data-table th {
+            background-color: #F9FAFB;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-badge.approved { background-color: #D1FAE5; color: #065F46; }
+        .status-badge.pending { background-color: #FEF3C7; color: #92400E; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Layout -->
+    <nav class="sidebar">
+        <div class="badge-header">
+            <h2>Metro Police</h2>
+            <small>Internal Portal</small>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Leave Management</a></li>
+            <li><a href="#">Duty Roster</a></li>
+            <li><a href="#">Profile & Credentials</a></li>
+            <li><a href="#">Station Orders</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Dynamic Content -->
+    <main class="main-content">
+        <header class="header-bar">
+            <div>
+                <h1>Leave Application & Tracking</h1>
+            </div>
+            <div class="user-info">
+                <div>Officer John Doe</div>
+                <span class="rank">Badge #4821 • Sergeant</span>
+            </div>
+        </header>
+
+        <!-- Top Row Metrics -->
+        <section class="metrics-grid">
+            <div class="card earned">
+                <h3>Earned Leave (EL)</h3>
+                <div class="balance">24 Days</div>
+            </div>
+            <div class="card casual">
+                <h3>Casual Leave (CL)</h3>
+                <div class="balance">8 Days</div>
+            </div>
+            <div class="card medical">
+                <h3>Sick / Medical Leave</h3>
+                <div class="balance">12 Days</div>
+            </div>
+        </section>
+
+        <!-- Two Column Split Section -->
+        <div class="portal-grid">
+            
+            <!-- Column 1: Application Form -->
+            <section class="form-container">
+                <h2 class="section-title">Request New Leave</h2>
+                <form id="leaveForm" onsubmit="handleLeaveSubmit(event)">
+                    <div class="form-group">
+                        <label for="leaveType">Leave Type</label>
+                        <select id="leaveType" class="form-control" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="Earned">Earned Leave</option>
+                            <option value="Casual">Casual Leave</option>
+                            <option value="Medical">Medical Leave</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Reason / Emergency Contact Details</label>
+                        <textarea id="reason" class="form-control" rows="3" placeholder="Provide brief reason and location if leaving station..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Submit Request to Command</button>
+                </form>
+            </section>
+
+            <!-- Column 2: History Tracking -->
+            <section class="table-container">
+                <h2 class="section-title">Recent Leave Applications</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Duration</th>
+                            <th>Days</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveHistoryTable">
+                        <tr>
+                            <td>Earned Leave</td>
+                            <td>Oct 10 - Oct 15, 2026</td>
+                            <td>5</td>
+                            <td><span class="status-badge approved">Approved</span></td>
+                        </tr>
+                        <tr>
+                            <td>Casual Leave</td>
+                            <td>Nov 04 - Nov 05, 2026</td>
+                            <td>2</td>
+                            <td><span class="status-badge approved">Approved</span></td>
+                        </tr>
+                        <tr>
+                            <td>Medical Leave</td>
+                            <td>Dec 12 - Dec 14, 2026</td>
+                            <td>3</td>
+                            <td><span class="status-badge pending">Pending Approval</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <!-- Simple JavaScript Interaction -->
+    <script>
+        function handleLeaveSubmit(event) {
+            event.preventDefault();
+            
+            // Extract Values
+            const type = document.getElementById('leaveType').value;
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            
+            // Rough day calculation
+            const d1 = new Date(start);
+            const d2 = new Date(end);
+            const timeDiff = d2.getTime() - d1.getTime();
+            const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+
+            if (days <= 0) {
+                alert("End date must be after or equal to the start date.");
+                return;
+            }
+
+            // Append a new dynamic row to the history table
+            const tableBody = document.getElementById('leaveHistoryTable');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td>${type} Leave</td>
+                <td>${start} to ${end}</td>
+                <td>${days}</td>
+                <td><span class="status-badge pending">Pending Approval</span></td>
+            `;
+            
+            // Insert at the top of the list
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+            
+            // Reset Form
+            document.getElementById('leaveForm').reset();
+            alert("Leave application sent up the chain of command successfully.");
+        }
+    </script>
+</body>
+</html>
