@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Police Department - Leave Portal</title>
+    <title>Uttar Pradesh Police - Employee Leave Portal</title>
     <style>
         :root {
-            --primary-color: #0B2240; /* Police Navy Blue */
-            --secondary-color: #1E3A8A;
-            --accent-color: #D97706; /* Badge Gold */
-            --bg-color: #F3F4F6;
+            --upp-navy: #1B2A47; /* UP Police Navy Blue */
+            --upp-red: #8B0000;  /* UP Police Dark Crimson Red */
+            --upp-gold: #D4AF37; /* UP Police Emblem Gold Accent */
+            --bg-color: #F4F6F9;
             --card-bg: #FFFFFF;
-            --text-main: #1F2937;
-            --text-muted: #6B7280;
-            --success: #10B981;
-            --pending: #F59E0B;
+            --text-main: #2D3748;
+            --text-muted: #718096;
+            --success: #2F855A;
+            --pending: #C05621;
         }
 
         * {
@@ -33,23 +33,39 @@
 
         /* Sidebar Navigation */
         .sidebar {
-            width: 260px;
-            background-color: var(--primary-color);
+            width: 280px;
+            background: linear-gradient(135deg, var(--upp-navy) 0%, #111B2E 100%);
             color: white;
             padding: 20px;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
         }
 
         .badge-header {
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 0 25px 0;
+            border-bottom: 2px solid var(--upp-red);
             margin-bottom: 25px;
         }
 
+        .police-logo {
+            width: 85px;
+            height: auto;
+            margin-bottom: 12px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+        }
+
         .badge-header h2 {
-            font-size: 1.2rem;
-            letter-spacing: 1px;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            color: #FFFFFF;
             text-transform: uppercase;
+            font-weight: 700;
+        }
+        
+        .badge-header small {
+            color: var(--upp-gold);
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .nav-links {
@@ -57,18 +73,22 @@
         }
 
         .nav-links li a {
-            display: block;
-            color: #E5E7EB;
-            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            color: #E2E8F0;
+            padding: 14px 15px;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 6px;
             margin-bottom: 8px;
-            transition: background 0.2s;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         .nav-links li a.active, .nav-links li a:hover {
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--accent-color);
+            background-color: var(--upp-red);
+            color: #FFFFFF;
+            border-left: 5px solid var(--upp-gold);
+            transform: translateX(4px);
         }
 
         /* Main Content Area */
@@ -83,18 +103,32 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #E5E7EB;
+            border-bottom: 3px solid var(--upp-navy);
             padding-bottom: 15px;
+        }
+
+        .header-bar h1 {
+            color: var(--upp-navy);
+            font-size: 1.75rem;
         }
 
         .user-info {
             text-align: right;
+            background: #E2E8F0;
+            padding: 8px 15px;
+            border-radius: 6px;
+            border-right: 4px solid var(--upp-red);
+        }
+
+        .user-info .name {
+            font-weight: 700;
+            color: var(--upp-navy);
         }
 
         .user-info .rank {
             font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: bold;
+            color: var(--text-main);
+            font-weight: 600;
         }
 
         /* Leave Balance Cards */
@@ -107,33 +141,43 @@
 
         .card {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 22px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-top: 4px solid var(--secondary-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--upp-navy);
+            position: relative;
+            overflow: hidden;
         }
 
-        .card.earned { border-top-color: var(--secondary-color); }
-        .card.casual { border-top-color: var(--accent-color); }
-        .card.medical { border-top-color: var(--success); }
+        /* UP Police dual ribbon style on top of cards */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            width: 50%;
+            height: 4px;
+            background: var(--upp-red);
+        }
 
         .card h3 {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             text-transform: uppercase;
             margin-bottom: 10px;
+            letter-spacing: 0.5px;
         }
 
         .card .balance {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--upp-navy);
         }
 
         /* Form & History Section Grid */
         .portal-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
+            grid-template-columns: 1fr 1.4fr;
             gap: 30px;
         }
 
@@ -147,58 +191,64 @@
             background: var(--card-bg);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .section-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin-bottom: 20px;
-            color: var(--primary-color);
-            border-bottom: 1px solid #E5E7EB;
+            color: var(--upp-navy);
+            border-bottom: 2px solid #EDF2F7;
             padding-bottom: 10px;
+            font-weight: 700;
         }
 
         /* Form Styling */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-size: 0.9rem;
             font-weight: 600;
+            color: var(--upp-navy);
         }
 
         .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #D1D5DB;
-            border-radius: 5px;
+            padding: 11px;
+            border: 1px solid #CBD5E0;
+            border-radius: 6px;
             font-size: 0.95rem;
+            color: var(--text-main);
         }
 
         .form-control:focus {
             outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+            border-color: var(--upp-red);
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.15);
         }
 
         .btn-submit {
-            background-color: var(--primary-color);
+            background-color: var(--upp-navy);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            padding: 13px 20px;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             transition: background 0.2s;
+            box-shadow: 0 4px 6px rgba(27, 42, 71, 0.2);
         }
 
         .btn-submit:hover {
-            background-color: var(--secondary-color);
+            background-color: var(--upp-red);
         }
 
         /* Table Styling */
@@ -210,25 +260,27 @@
         }
 
         .data-table th, .data-table td {
-            padding: 12px;
-            border-bottom: 1px solid #E5E7EB;
+            padding: 14px 12px;
+            border-bottom: 1px solid #E2E8F0;
         }
 
         .data-table th {
-            background-color: #F9FAFB;
-            color: var(--text-muted);
-            font-weight: 600;
+            background-color: #F7FAFC;
+            color: var(--upp-navy);
+            font-weight: 700;
         }
 
         .status-badge {
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: 4px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
         }
 
-        .status-badge.approved { background-color: #D1FAE5; color: #065F46; }
-        .status-badge.pending { background-color: #FEF3C7; color: #92400E; }
+        .status-badge.approved { background-color: #C6F6D5; color: var(--success); }
+        .status-badge.pending { background-color: #FEEBC8; color: var(--pending); }
     </style>
 </head>
 <body>
@@ -236,14 +288,16 @@
     <!-- Sidebar Layout -->
     <nav class="sidebar">
         <div class="badge-header">
-            <h2>Metro Police</h2>
-            <small>Internal Portal</small>
+            <!-- Official Live UP Police Logo URL -->
+            <img class="police-logo" src="https://uppolice.gov.in/site/writereaddata/siteImages/logo.png" alt="UP Police Logo">
+            <h2>उत्तर प्रदेश पुलिस</h2>
+            <small>UP POLICE PORTAL</small>
         </div>
         <ul class="nav-links">
-            <li><a href="#" class="active">Leave Management</a></li>
-            <li><a href="#">Duty Roster</a></li>
-            <li><a href="#">Profile & Credentials</a></li>
-            <li><a href="#">Station Orders</a></li>
+            <li><a href="#" class="active">Leave Management (अवकाश)</a></li>
+            <li><a href="#">Duty Roster (ड्यूटी रोस्टर)</a></li>
+            <li><a href="#">G.D. Entries (जनरल डायरी)</a></li>
+            <li><a href="#">Character Roll (चरित्र पंजिका)</a></li>
         </ul>
     </nav>
 
@@ -251,27 +305,27 @@
     <main class="main-content">
         <header class="header-bar">
             <div>
-                <h1>Leave Application & Tracking</h1>
+                <h1>Online Leave Module (ऑनलाइन अवकाश प्रणाली)</h1>
             </div>
             <div class="user-info">
-                <div>Officer John Doe</div>
-                <span class="rank">Badge #4821 • Sergeant</span>
+                <div class="name">Constable Amit Kumar</div>
+                <span class="rank">PNO #162730044 • Civil Police</span>
             </div>
         </header>
 
         <!-- Top Row Metrics -->
         <section class="metrics-grid">
-            <div class="card earned">
-                <h3>Earned Leave (EL)</h3>
-                <div class="balance">24 Days</div>
+            <div class="card">
+                <h3>Casual Leave (आकस्मिक अवकाश)</h3>
+                <div class="balance">14 Days</div>
             </div>
-            <div class="card casual">
-                <h3>Casual Leave (CL)</h3>
-                <div class="balance">8 Days</div>
+            <div class="card">
+                <h3>Earned Leave (अर्जित अवकाश)</h3>
+                <div class="balance">30 Days</div>
             </div>
-            <div class="card medical">
-                <h3>Sick / Medical Leave</h3>
-                <div class="balance">12 Days</div>
+            <div class="card">
+                <h3>Medical Leave (चिकित्सा अवकाश)</h3>
+                <div class="balance">15 Days</div>
             </div>
         </section>
 
@@ -280,63 +334,63 @@
             
             <!-- Column 1: Application Form -->
             <section class="form-container">
-                <h2 class="section-title">Request New Leave</h2>
+                <h2 class="section-title">Apply For Leave (अवकाश हेतु आवेदन)</h2>
                 <form id="leaveForm" onsubmit="handleLeaveSubmit(event)">
                     <div class="form-group">
-                        <label for="leaveType">Leave Type</label>
+                        <label for="leaveType">Leave Type / अवकाश का प्रकार</label>
                         <select id="leaveType" class="form-control" required>
-                            <option value="">-- Select Type --</option>
-                            <option value="Earned">Earned Leave</option>
-                            <option value="Casual">Casual Leave</option>
-                            <option value="Medical">Medical Leave</option>
+                            <option value="">-- Select --</option>
+                            <option value="Casual">Casual Leave (CL)</option>
+                            <option value="Earned">Earned Leave (EL)</option>
+                            <option value="Medical">Medical Leave (ML)</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="startDate">Start Date</label>
+                        <label for="startDate">From Date / दिनांक से</label>
                         <input type="date" id="startDate" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="endDate">End Date</label>
+                        <label for="endDate">To Date / दिनांक तक</label>
                         <input type="date" id="endDate" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="reason">Reason / Emergency Contact Details</label>
-                        <textarea id="reason" class="form-control" rows="3" placeholder="Provide brief reason and location if leaving station..." required></textarea>
+                        <label for="reason">Reason & Out of Station Address / कारण एवं गंतव्य स्थान का पता</label>
+                        <textarea id="reason" class="form-control" rows="3" placeholder="Enter clear reasons and your address during leave period..." required></textarea>
                     </div>
-                    <button type="submit" class="btn-submit">Submit Request to Command</button>
+                    <button type="submit" class="btn-submit">Forward to RI / SHO</button>
                 </form>
             </section>
 
             <!-- Column 2: History Tracking -->
             <section class="table-container">
-                <h2 class="section-title">Recent Leave Applications</h2>
+                <h2 class="section-title">Application Status (आवेदन की स्थिति)</h2>
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>Type</th>
                             <th>Duration</th>
                             <th>Days</th>
-                            <th>Status</th>
+                            <th>Status / Approval</th>
                         </tr>
                     </thead>
                     <tbody id="leaveHistoryTable">
                         <tr>
+                            <td>Casual Leave</td>
+                            <td>Jan 12 - Jan 14, 2026</td>
+                            <td>3</td>
+                            <td><span class="status-badge approved">Approved</span></td>
+                        </tr>
+                        <tr>
                             <td>Earned Leave</td>
-                            <td>Oct 10 - Oct 15, 2026</td>
-                            <td>5</td>
+                            <td>Mar 05 - Mar 15, 2026</td>
+                            <td>10</td>
                             <td><span class="status-badge approved">Approved</span></td>
                         </tr>
                         <tr>
                             <td>Casual Leave</td>
-                            <td>Nov 04 - Nov 05, 2026</td>
+                            <td>Jul 24 - Jul 26, 2026</td>
                             <td>2</td>
-                            <td><span class="status-badge approved">Approved</span></td>
-                        </tr>
-                        <tr>
-                            <td>Medical Leave</td>
-                            <td>Dec 12 - Dec 14, 2026</td>
-                            <td>3</td>
-                            <td><span class="status-badge pending">Pending Approval</span></td>
+                            <td><span class="status-badge pending">Under Review</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -344,44 +398,40 @@
         </div>
     </main>
 
-    <!-- Simple JavaScript Interaction -->
+    <!-- JavaScript Interaction -->
     <script>
         function handleLeaveSubmit(event) {
             event.preventDefault();
             
-            // Extract Values
             const type = document.getElementById('leaveType').value;
             const start = document.getElementById('startDate').value;
             const end = document.getElementById('endDate').value;
             
-            // Rough day calculation
             const d1 = new Date(start);
             const d2 = new Date(end);
             const timeDiff = d2.getTime() - d1.getTime();
             const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
             if (days <= 0) {
-                alert("End date must be after or equal to the start date.");
+                alert("Error: End date must be after or equal to the start date.");
                 return;
             }
 
-            // Append a new dynamic row to the history table
             const tableBody = document.getElementById('leaveHistoryTable');
             const newRow = document.createElement('tr');
             
+            // Format dates simply for display
             newRow.innerHTML = `
                 <td>${type} Leave</td>
                 <td>${start} to ${end}</td>
                 <td>${days}</td>
-                <td><span class="status-badge pending">Pending Approval</span></td>
+                <td><span class="status-badge pending">Sent to Forwarding Authority</span></td>
             `;
             
-            // Insert at the top of the list
             tableBody.insertBefore(newRow, tableBody.firstChild);
             
-            // Reset Form
             document.getElementById('leaveForm').reset();
-            alert("Leave application sent up the chain of command successfully.");
+            alert("Application successfully submitted up the chain of command.");
         }
     </script>
 </body>
