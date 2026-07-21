@@ -299,11 +299,61 @@
         <li><a href="#">G.D. Entries (जनरल डायरी)</a></li>
         <li><a href="#">Character Roll (चरित्र पंजिका)</a></li>
         <!-- ADMIN LOGIN LINK ADDED HERE -->
-        <li style="margin-top: 30px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 15px;">
-            <a href="admin-login.html" style="background-color: var(--upp-red); color: white; text-align: center; font-weight: bold;">
-                Command / Admin Login
-            </a>
-        </li>
+<div class="modal-overlay" id="logoutModal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3 class="modal-title">Confirm Logout</h3>
+      <p class="modal-body">Are you sure you want to log out of your session?</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeLogoutModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmLogout()">Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('logoutModal');
+
+    function openLogoutModal() {
+      modal.classList.add('active');
+    }
+
+    function closeLogoutModal() {
+      modal.classList.remove('active');
+    }
+
+    function confirmLogout() {
+      // 1. Clear session and local storage items
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // 2. Clear any active session cookies (if applicable)
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+
+      // 3. Redirect to login page
+      window.location.href = 'login.html';
+    }
+
+    // Close modal if user clicks outside the modal box
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeLogoutModal();
+      }
+    });
+
+    // Close modal on Escape key press
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeLogoutModal();
+      }
+    });
+  </script>
+
+
+        
     </ul>
 </nav>
 
